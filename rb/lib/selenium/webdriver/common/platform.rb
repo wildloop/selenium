@@ -70,10 +70,6 @@ module Selenium
         engine == :jruby
       end
 
-      def ironruby?
-        engine == :ironruby
-      end
-
       def ruby_version
         RUBY_VERSION
       end
