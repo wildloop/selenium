@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.3
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
@@ -176,3 +176,6 @@ Style/Dir:
 
 Lint/RescueWithoutErrorClass:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
