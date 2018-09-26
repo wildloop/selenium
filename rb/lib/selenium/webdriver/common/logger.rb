@@ -40,47 +40,19 @@ module Selenium
                      :warn, :warn?,
                      :error, :error?,
                      :fatal, :fatal?,
-                     :level
+                     :level, :level=
 
       def initialize
         @logger = create_logger($stdout)
       end
 
+      #
+      # Changes logger output to a new IO.
+      #
+      # @param [String] io
+      #
       def output=(io)
-        # `Logger#reopen` was added in Ruby 2.3
-        if @logger.respond_to?(:reopen)
-          @logger.reopen(io)
-        else
-          @logger = create_logger(io)
-        end
-      end
-
-      #
-      # For Ruby < 2.3 compatibility
-      # Based on https://github.com/ruby/ruby/blob/ruby_2_3/lib/logger.rb#L250
-      #
-
-      def level=(severity)
-        if severity.is_a?(Integer)
-          @logger.level = severity
-        else
-          case severity.to_s.downcase
-          when 'debug'.freeze
-            @logger.level = DEBUG
-          when 'info'.freeze
-            @logger.level = INFO
-          when 'warn'.freeze
-            @logger.level = WARN
-          when 'error'.freeze
-            @logger.level = ERROR
-          when 'fatal'.freeze
-            @logger.level = FATAL
-          when 'unknown'.freeze
-            @logger.level = UNKNOWN
-          else
-            raise ArgumentError, "invalid log level: #{severity}"
-          end
-        end
+        @logger.reopen(io)
       end
 
       #
