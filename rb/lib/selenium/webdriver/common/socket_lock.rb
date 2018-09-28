@@ -58,7 +58,7 @@ module Selenium
       end
 
       def release
-        @server && @server.close
+        @server&.close
       end
 
       def can_lock?
