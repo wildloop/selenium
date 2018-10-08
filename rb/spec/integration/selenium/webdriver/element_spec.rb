@@ -75,8 +75,7 @@ module Selenium
         expect(element.attribute('value')).to be_empty
 
         file = Tempfile.new('file-upload')
-        path = file.path
-        path.tr!('/', '\\') if WebDriver::Platform.windows?
+        path = WebDriver::Platform.windows_path(file.path) if WebDriver::Platform.windows?
 
         element.send_keys path
 
