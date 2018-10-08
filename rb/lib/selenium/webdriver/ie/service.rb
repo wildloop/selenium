@@ -24,8 +24,8 @@ module Selenium
 
       class Service < WebDriver::Service
         DEFAULT_PORT = 5555
-        @executable = 'IEDriverServer'.freeze
-        @missing_text = <<-ERROR.gsub(/\n +| {2,}/, ' ').freeze
+        EXECUTABLE = 'IEDriverServer'.freeze
+        MISSING_TEXT = <<~ERROR.freeze
           Unable to find IEDriverServer. Please download the server from
           http://selenium-release.storage.googleapis.com/index.html and place it somewhere on your PATH.
           More info at https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver.
