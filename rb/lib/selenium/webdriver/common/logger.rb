@@ -33,9 +33,10 @@ module Selenium
     #
     class Logger
       extend Forwardable
-      include ::Logger::Severity
 
-      def_delegators :@logger, :debug, :debug?,
+      def_delegators :@logger,
+                     :close,
+                     :debug, :debug?,
                      :info, :info?,
                      :warn, :warn?,
                      :error, :error?,
@@ -67,7 +68,7 @@ module Selenium
       # @api private
       #
       def io
-        @logger.instance_variable_get(:@logdev).instance_variable_get(:@dev)
+        @logger.instance_variable_get(:@logdev).dev
       end
 
       #
@@ -102,9 +103,9 @@ module Selenium
 
       def default_level
         if $DEBUG || ENV.key?('DEBUG')
-          DEBUG
+          :debug
         else
-          WARN
+          :warn
         end
       end
     end # Logger
