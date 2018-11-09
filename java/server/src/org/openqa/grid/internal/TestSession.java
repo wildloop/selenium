@@ -54,12 +54,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.time.Clock;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 import javax.management.MalformedObjectNameException;
@@ -458,20 +453,21 @@ public class TestSession {
     String proxyHost = request.getHeader(PROXY_HOST_HEADER_NAME);
     if (proxyHost == null || proxyHost.isEmpty()) {
       proxyRequest.setHeader(PROXY_HOST_HEADER_NAME, host);
+      log.info("Prepare proxy request, set: "+PROXY_HOST_HEADER_NAME+"="+host+", was empty, without change: "+HOST_HEADER_NAME+"="+host);
     } else {
-      proxyRequest.setHeader(HOST_HEADER_NAME, remoteURL.getHost());
+      String remoteHost = remoteURL.getHost();
+      proxyRequest.setHeader(HOST_HEADER_NAME, remoteHost);
+      log.info("Prepare proxy request, set: "+HOST_HEADER_NAME+"="+remoteHost+", was: "+host+", without change: "+PROXY_HOST_HEADER_NAME+"="+proxyHost);
     }
+    final List<String> alreadySetHeaders = Arrays.asList(
+      "Content-Length".toUpperCase(),
+      HOST_HEADER_NAME.toUpperCase(),
+      PROXY_HOST_HEADER_NAME.toUpperCase());
     for (Enumeration<?> e = request.getHeaderNames(); e.hasMoreElements(); ) {
       String headerName = (String) e.nextElement();
-
-      if ("Content-Length".equalsIgnoreCase(headerName)) {
-        continue; // already set
+      if (!alreadySetHeaders.contains(headerName.toUpperCase())){
+        proxyRequest.setHeader(headerName, request.getHeader(headerName));
       }
-      if (HOST_HEADER_NAME.equalsIgnoreCase(headerName) || PROXY_HOST_HEADER_NAME.equalsIgnoreCase(headerName)) {
-        continue; // already set
-      }
-
-      proxyRequest.setHeader(headerName, request.getHeader(headerName));
     }
     return proxyRequest;
   }
